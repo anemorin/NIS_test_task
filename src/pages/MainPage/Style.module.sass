@@ -1,0 +1,45 @@
+.page
+  height: 100%
+  display: flex
+  overflow: hidden
+
+.table
+  max-height: 75vh
+  flex: 1
+
+.title
+  font-size: 32px
+  font-weight: bold
+
+.sliderContainer
+  flex-shrink: 0
+  width: 20vw
+  max-width: 300px
+  transform: translateX(150%)
+  overflow: hidden
+
+.slider
+  width: 500px
+  transition: width .60s ease, transform .30s ease, opacity .30s ease
+  overflow: hidden
+  opacity: 1
+  transform: translateX(0)
+
+  &_hidden
+    opacity: 0
+    transform: translateX(150%)
+    transition: width .60s ease, transform .30s ease, opacity .30s ease, visibility .30s linear .30s
+    visibility: hidden
+    width: 0
+    white-space: nowrap
+
+.sliderOpen
+  transform: translateX(0)
+
+.column
+  display: flex
+  flex-direction: column
+  width: 100%
+  gap: 24px
+  padding: 24px
+  overflow: hidden
