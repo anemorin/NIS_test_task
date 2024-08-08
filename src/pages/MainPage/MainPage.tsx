@@ -32,6 +32,10 @@ const MainPage: FC = () => {
     dispatch(onChangeForks(data ?? {}));
   }, [data]);
 
+  useEffect(() => {
+    setSelectedRow(undefined);
+  }, [store.search]);
+
   const columns: GridColDef[] = [
     {
       field: "name",
@@ -55,55 +59,57 @@ const MainPage: FC = () => {
       {!store.search?.length ? (
         <EmptyPage />
       ) : (
-        <div className={Styles.column}>
-          <div className={Styles.title}>Результаты поиска</div>
-          <DataGrid
-            rows={getForkTableData({ forkSlice: store })}
-            columns={columns}
-            paginationMode="server"
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: store.filter.pageSize,
-                  page: store.filter.page - 1,
+        <>
+          <div className={Styles.column}>
+            <div className={Styles.title}>Результаты поиска</div>
+            <DataGrid
+              rows={getForkTableData({ forkSlice: store })}
+              columns={columns}
+              paginationMode="server"
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: store.filter.pageSize,
+                    page: store.filter.page - 1,
+                  },
                 },
-              },
-            }}
-            onPaginationModelChange={(pagination) => {
-              dispatch(onChangeFilter(pagination));
-            }}
-            autosizeOptions={{
-              columns: ["name", "language", "updated_at"],
-              includeOutliers: true,
-              includeHeaders: false,
-            }}
-            rowCount={store.filter.totalCount}
-            pagination
-            disableColumnFilter
-            className={Styles.table}
-            loading={isFetching}
-            pageSizeOptions={[10, 25, 50]}
-            disableColumnMenu
-            onRowSelectionModelChange={(selection) => {
-              setSelectedRow(+selection[0]);
-            }}
-            sortingMode="server"
-            onSortModelChange={(sortModel) => {
-              if (!!sortModel.length) {
-                dispatch(
-                  onChangeSortOptions({
-                    field: sortModel[0].field,
-                    direction: sortModel[0].sort,
-                  })
-                );
-              }
-            }}
-          />
-        </div>
+              }}
+              onPaginationModelChange={(pagination) => {
+                dispatch(onChangeFilter(pagination));
+              }}
+              autosizeOptions={{
+                columns: ["name", "language", "updated_at"],
+                includeOutliers: true,
+                includeHeaders: false,
+              }}
+              rowCount={store.filter.totalCount}
+              pagination
+              disableColumnFilter
+              className={Styles.table}
+              loading={isFetching}
+              pageSizeOptions={[10, 25, 50]}
+              disableColumnMenu
+              onRowSelectionModelChange={(selection) => {
+                setSelectedRow(+selection[0]);
+              }}
+              sortingMode="server"
+              onSortModelChange={(sortModel) => {
+                if (!!sortModel.length) {
+                  dispatch(
+                    onChangeSortOptions({
+                      field: sortModel[0].field,
+                      direction: sortModel[0].sort,
+                    })
+                  );
+                }
+              }}
+            />
+          </div>
+          <div className={!!selectedRow ? Styles.slider : Styles.slider_hidden}>
+            {selectedRow && <InfoSlider id={selectedRow} />}
+          </div>
+        </>
       )}
-      <div className={!!selectedRow ? Styles.slider : Styles.slider_hidden}>
-        {selectedRow && <InfoSlider id={selectedRow} />}
-      </div>
     </div>
   );
 };

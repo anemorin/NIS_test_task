@@ -7,6 +7,7 @@ const InfoSlider: FC<{ id: number }> = ({ id }) => {
     useAppSelector((store) => store.forkSlice).forks?.filter(
       (fork) => fork.id === id
     )[0] ?? undefined;
+
   return (
     <div className={Styles.container}>
       <div className={Styles.title}>{fork?.name}</div>
